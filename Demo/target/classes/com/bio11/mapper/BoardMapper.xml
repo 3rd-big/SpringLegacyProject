@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bio11.mapper.BoardMapper">
+
+	<select id="getList" resultType="com.bio11.domain.BoardVO">
+		SELECT * FROM TBL_BOARD WHERE BNO > 0
+	</select>
+	
+	
+	<insert id="insert">
+		INSERT INTO TBL_BOARD(TITLE, CONTENT, WRITER)
+		VALUES(#{title}, #{content}, #{writer})	<!-- #{} 이거는 java bean 을 활용하므로 대소문자 구분!! -->
+	</insert>
+	
+	
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+			SELECT BNO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_BOARD(BNO, TITLE, CONTENT, WRITER)
+		VALUES(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	
+	
+	<select id="read" resultType="com.bio11.domain.BoardVO">
+		SELECT * FROM TBL_BOARD WHERE BNO = #{bno}
+	</select>
+	
+	
+	<delete id="delete">
+		DELETE FROM TBL_BOARD WHERE BNO = #{bno}
+	</delete>
+	
+	
+	<update id="update">
+		UPDATE TBL_BOARD
+		SET TITLE = #{title},
+			CONTENT = #{content},
+			UPDATEDATE = sysdate
+		WHERE BNO = #{bno}	
+	</update>
+	
+</mapper>
